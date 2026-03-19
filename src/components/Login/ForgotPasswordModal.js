@@ -8,26 +8,38 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const modalRef = useRef(null);
-  const inputRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
+    const handleClickOutside = (event) => {
+      // Verifica se o clique foi fora do modal e não em nenhum elemento do modal
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
+      // Adiciona o evento com um pequeno delay para não capturar o clique que abriu o modal
+      setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 100);
     }
 
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  // Focar no input quando o modal abrir
+  useEffect(() => {
+    if (isOpen) {
+      const inputElement = document.getElementById('email-input');
+      if (inputElement) {
+        setTimeout(() => {
+          inputElement.focus();
+        }, 150);
+      }
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,27 +63,29 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !loading) {
-      handleSubmit(e);
-    }
-  };
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content forgot-modal" ref={modalRef}>
-        <button className="modal-close" onClick={onClose}>×</button>
+        <button 
+          type="button"
+          className="modal-close" 
+          onClick={onClose}
+        >
+          ×
+        </button>
         
         <h2>Recuperar Senha</h2>
         
-        <form onSubmit={handleSubmit} onKeyPress={handleKeyPress}>
+        <form onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
           {message && <div className="success-message">{message}</div>}
           
           <p>Digite seu email para receber as instruções de recuperação de senha.</p>
           
           <input
-            ref={inputRef}
+            id="email-input"
             type="email"
             placeholder="Seu email"
             value={email}
@@ -80,7 +94,11 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
             className="forgot-input"
           />
           
-          <button type="submit" className="forgot-button" disabled={loading}>
+          <button 
+            type="submit" 
+            className="forgot-button" 
+            disabled={loading}
+          >
             {loading ? 'Enviando...' : 'Enviar'}
           </button>
         </form>
