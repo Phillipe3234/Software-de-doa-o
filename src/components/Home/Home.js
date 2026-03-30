@@ -24,6 +24,7 @@ const Home = ({ setCurrentPage, user, setUser }) => {
   const [showCompanyDonation, setShowCompanyDonation] = useState(false);
   const [donations, setDonations] = useState([]);
   const [totalDonated, setTotalDonated] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('Todos'); // Adicionando estado para categoria selecionada
 
   useEffect(() => {
     if (user) {
@@ -73,6 +74,16 @@ const Home = ({ setCurrentPage, user, setUser }) => {
     setCurrentPage('homepage');
   };
 
+  // Filtrando empresas baseado na categoria selecionada
+  const filteredCompanies = selectedCategory === 'Todos' 
+    ? companies 
+    : companies.filter(company => company.category === selectedCategory);
+
+  // Função para mudar a categoria
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <div className="home-container">
       <HamburgerMenu 
@@ -106,16 +117,41 @@ const Home = ({ setCurrentPage, user, setUser }) => {
       <div className="featured-section">
         <h2>Causas em Destaque</h2>
         <div className="categories">
-          <button className="category-tag active">Todos</button>
-          <button className="category-tag">Saúde</button>
-          <button className="category-tag">Educação</button>
-          <button className="category-tag">Meio Ambiente</button>
-          <button className="category-tag">Animais</button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Todos' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Todos')}
+          >
+            Todos
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Saúde' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Saúde')}
+          >
+            Saúde
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Educação' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Educação')}
+          >
+            Educação
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Meio Ambiente' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Meio Ambiente')}
+          >
+            Meio Ambiente
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Animais' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Animais')}
+          >
+            Animais
+          </button>
         </div>
       </div>
 
       <div className="companies-grid">
-        {companies.map(company => (
+        {filteredCompanies.map(company => (
           <div key={company.id} className="company-card">
             <div className="company-icon">
               <i className="fa-solid fa-building"></i>
