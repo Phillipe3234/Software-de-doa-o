@@ -14,7 +14,8 @@ const companies = [
   { id: 5, name: 'Empresa E', pix: '11945957451', category: 'Crianças', description: 'Apoio à infância' },
   { id: 6, name: 'Empresa F', pix: '11945957452', category: 'Idosos', description: 'Assistência a idosos' },
   { id: 7, name: 'Empresa G', pix: '11945957453', category: 'Cultura', description: 'Incentivo à cultura' },
-  { id: 8, name: 'Empresa H', pix: '11945957454', category: 'Esportes', description: 'Projetos esportivos' }
+  { id: 8, name: 'Empresa H', pix: '11945957454', category: 'Esportes', description: 'Projetos esportivos' },
+  { id: 9, name: 'fsjpii', pix: '11945957447', category: 'Saúde', description: 'Apoie hospitais e tratamentos' }
 ];
 
 const Home = ({ setCurrentPage, user, setUser }) => {
@@ -24,6 +25,7 @@ const Home = ({ setCurrentPage, user, setUser }) => {
   const [showCompanyDonation, setShowCompanyDonation] = useState(false);
   const [donations, setDonations] = useState([]);
   const [totalDonated, setTotalDonated] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('Todos'); // Adicionando estado para categoria selecionada
 
   useEffect(() => {
     if (user) {
@@ -73,6 +75,16 @@ const Home = ({ setCurrentPage, user, setUser }) => {
     setCurrentPage('homepage');
   };
 
+  // Filtrando empresas baseado na categoria selecionada
+  const filteredCompanies = selectedCategory === 'Todos' 
+    ? companies 
+    : companies.filter(company => company.category === selectedCategory);
+
+  // Função para mudar a categoria
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <div className="home-container">
       <HamburgerMenu 
@@ -106,16 +118,65 @@ const Home = ({ setCurrentPage, user, setUser }) => {
       <div className="featured-section">
         <h2>Causas em Destaque</h2>
         <div className="categories">
-          <button className="category-tag active">Todos</button>
-          <button className="category-tag">Saúde</button>
-          <button className="category-tag">Educação</button>
-          <button className="category-tag">Meio Ambiente</button>
-          <button className="category-tag">Animais</button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Todos' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Todos')}
+          >
+            Todos
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Saúde' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Saúde')}
+          >
+            Saúde
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Educação' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Educação')}
+          >
+            Educação
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Meio Ambiente' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Meio Ambiente')}
+          >
+            Meio Ambiente
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Animais' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Animais')}
+          >
+            Animais
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Crianças' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Animais')}
+          >
+            Crianças
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Idosos' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Animais')}
+          >
+            Idosos
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Cultura' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Animais')}
+          >
+            Cultura
+          </button>
+          <button 
+            className={`category-tag ${selectedCategory === 'Esportes' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('Animais')}
+          >
+            Esportes
+          </button>
         </div>
       </div>
 
       <div className="companies-grid">
-        {companies.map(company => (
+        {filteredCompanies.map(company => (
           <div key={company.id} className="company-card">
             <div className="company-icon">
               <i className="fa-solid fa-building"></i>
@@ -166,5 +227,6 @@ const Home = ({ setCurrentPage, user, setUser }) => {
     </div>
   );
 };
+
 
 export default Home;
