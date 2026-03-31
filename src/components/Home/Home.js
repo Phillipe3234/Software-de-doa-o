@@ -148,7 +148,6 @@ const Home = ({ setCurrentPage, user, setUser }) => {
           >
             Animais
           </button>
-<<<<<<< HEAD
           <button 
             className={`category-tag ${selectedCategory === 'Crianças' ? 'active' : ''}`}
             onClick={() => handleCategoryChange('Animais')}
@@ -173,8 +172,6 @@ const Home = ({ setCurrentPage, user, setUser }) => {
           >
             Esportes
           </button>
-=======
->>>>>>> 9923b36d47e1ea779ff5dfdbc900a4380bd4e2b8
         </div>
       </div>
 
@@ -231,9 +228,5 @@ const Home = ({ setCurrentPage, user, setUser }) => {
   );
 };
 
-<<<<<<< HEAD
 
 export default Home;
-=======
-export default Home;
->>>>>>> 9923b36d47e1ea779ff5dfdbc900a4380bd4e2b8
